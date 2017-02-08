@@ -2,12 +2,12 @@
   "name": "jorhett-puppet4",
   "version": "0.1.0",
   "author": "Jo Rhett",
-  "summary": "Configures Puppet 4 agent, master, server",
+  "summary": "Installs and configures Puppet 4 package, tools, and optionally agent",
   "license": "BSD-3-Clause",
   "source": "https://github.com/jorhett/puppet4-module",
   "issues_url": "https://github.com/jorhett/puppet4-module/issues",
   "project_page": "https://github.com/jorhett/puppet4-module",
-  "tags": ["puppet4","puppet-server"],
+  "tags": ["puppet4"],
   "operatingsystem_support": [
     {
       "operatingsystem":"RedHat",
@@ -35,7 +35,7 @@
     },
     {
       "operatingsystem": "Ubuntu",
-      "operatingsystemrelease": [ "15.04", "14.10", "14.04", "13.10", "13.04", "12.10", "12.04" ]
+      "operatingsystemrelease": [ "16.10", "16.04", "15.10", "15.04", "14.10", "14.04", "13.10", "13.04", "12.10", "12.04" ]
     }
   ],
   "requirements": [

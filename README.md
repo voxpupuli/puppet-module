@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/voxpupuli/puppet4.svg?branch=master)](https://travis-ci.org/voxpupuli/puppet4)
 
-Manage Puppet 4 local apply, agent, certificate, and Puppet Server configuration.
+Manage Puppet 4 local apply, agent, and certificate configuration.
 
 #### Table of Contents
 
@@ -19,14 +19,16 @@ Manage Puppet 4 local apply, agent, certificate, and Puppet Server configuration
 
 ## Overview
 
-This is a module written to manage Puppet 4 configuration, agent, master, and Puppet Server.
+This module utilizes Hiera hierarchies to customize Puppet 4 configuration for all three commands:
+  * ```puppet apply```
+  * ```puppet agent```
+  * ```puppet cert```
+  * ...etc
 
 ## Module Description
 
-Installs and configures Puppet 4, and optionally, the agent, master, and Puppet Server
-daemons.
-
-This a demonstration module utilizing Puppet 4 features and demonstrating Puppet best practices.
+Installs and configures Puppet 4 package and optionally the agent daemon.
+It strives to demonstrate Puppet 4 best practices.
 
 ## Setup
 
@@ -67,10 +69,8 @@ Configuration values in Hiera (or supplied by an node terminus):
   * `puppet4::agent::status` = 'Running' (default) or 'Stopped'
   * `puppet4::agent::enabled` = true (default) or false
   * `puppet4::agent::config` = Hash of configuration parameters for the [agent] section of puppet.conf
-* Server
-  * `puppet4::server::status` = 'Running' (default) or 'Stopped'
-  * `puppet4::server::enabled` = true (default) or false
-  * `puppet4::server::config` = Hash of configuration parameters for the [master] section of puppet.conf
+* Master
+  * `puppet4::master::config` = Hash of configuration parameters for the [master] section of puppet.conf
 
 ## Reference
 
@@ -84,9 +84,6 @@ Configuration values in Hiera (or supplied by an node terminus):
 
 ## Limitations
 
-Uses data types and validateion features of Puppet 4 therefore only Puppet 4 is supported.
+Uses data types and validation features of Puppet 4 therefore only Puppet 4 is supported.
 May possibly work with Puppet 3.7 or higher with the 'future' parser but is not tested as such.
-
-## Development
-
 
