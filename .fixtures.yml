@@ -1,0 +1,8 @@
+fixtures:
+  symlinks:
+    puppet4: "#{source_dir}"
+
+  forge_modules:
+    stdlib:
+      repo: "puppetlabs/stdlib"
+      ref: 4.5.1
