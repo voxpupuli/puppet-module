@@ -1,6 +1,6 @@
-# Puppet4 Configuration
+# Puppet Configuration
 
-[![Build Status](https://travis-ci.org/voxpupuli/puppet4.svg?branch=master)](https://travis-ci.org/voxpupuli/puppet4)
+[![Build Status](https://travis-ci.org/voxpupuli/puppet-module.svg?branch=master)](https://travis-ci.org/voxpupuli/puppet-module)
 
 Manage Puppet 4 local apply, agent, and certificate configuration.
 
@@ -44,46 +44,39 @@ It strives to demonstrate Puppet 4 best practices.
 
 ### Setup Requirements
 
-Requires the Puppet 4 package to be installed. (catch-22 yes I know)
-I may attempt in the future to test a way to upgrade from Puppet 3 but that is
-has not been tested.
+Requires the `puppet-agent` package to be installed. (catch-22 yes I know)
 
 ### Beginning with puppet
 
 Hiera configuration:
 
     classes:
-      - puppet4
-      - puppet4::agent (optional)
+      - puppet
+      - puppet::agent (optional)
 
 ## Usage
 
 Configuration values in Hiera (or supplied by an node terminus):
 
 * Common
-  * `puppet4::pc_version` = Integer version of the Package Collection to use
-  * `puppet4::version` = 'latest', 'present', 'absent', or a specific version.
-  * `puppet4::config` = Hash of configuration parameters for the [main] section of puppet.conf
-  * `puppet4::user::config` = Hash of configuration parameters for the [user] section of puppet.conf
+  * `puppet::pc_version` = Integer version of the Package Collection to use
+  * `puppet::version` = 'latest', 'present', 'absent', or a specific version.
+  * `puppepuppetig` = Hash of configuration parameters for the [main] section of puppet.conf
+  * `puppet::user::config` = Hash of configuration parameters for the [user] section of puppet.conf
 * Agent
-  * `puppet4::agent::status` = 'Running' (default) or 'Stopped'
-  * `puppet4::agent::enabled` = true (default) or false
-  * `puppet4::agent::config` = Hash of configuration parameters for the [agent] section of puppet.conf
+  * `puppet::agent::status` = 'Running' (default) or 'Stopped'
+  * `puppet::agent::enabled` = true (default) or false
+  * `puppet::agent::config` = Hash of configuration parameters for the [agent] section of puppet.conf
 * Master
-  * `puppet4::master::config` = Hash of configuration parameters for the [master] section of puppet.conf
+  * `puppet::master::config` = Hash of configuration parameters for the [master] section of puppet.conf
 
 ## Reference
 
 ### Setup Requirements
 
 * Classes
-  * puppet4 - Maintains package repository, puppet package, and [main] block of puppet.conf
-  * puppet4::user - Maintains [user] block of puppet.conf
-  * puppet4::agent - Maintains [agent] block of puppet.conf and the `puppet` service
-  * puppet4::server - Maintains [master] block of puppet.conf and the `puppetserver` service
-
-## Limitations
-
-Uses data types and validation features of Puppet 4 therefore only Puppet 4 is supported.
-May possibly work with Puppet 3.7 or higher with the 'future' parser but is not tested as such.
+  * `puppet` - Maintains package repository, puppet package, and [main] block of puppet.conf
+  * `puppet::user` - Maintains [user] block of puppet.conf
+  * `puppet::agent` - Maintains [agent] block of puppet.conf and the `puppet` service
+  * `puppet::server` - Maintains [master] block of puppet.conf and the `puppetserver` service
 

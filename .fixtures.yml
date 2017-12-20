@@ -1,8 +1,8 @@
 fixtures:
-  symlinks:
-    puppet4: "#{source_dir}"
-
   forge_modules:
     stdlib:
       repo: "puppetlabs/stdlib"
-      ref: 4.5.1
+      ref: 4.12.0
+    inifile:
+      repo: "puppetlabs/inifile"
+      ref: 2.1.1

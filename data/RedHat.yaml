@@ -1,0 +1,21 @@
+---
+puppet::repos:
+  puppet5:
+    name: 'puppet5'
+    enabled: true
+    descr: "Puppet 5 Repository el %{facts.os.release.major} - $basearch"
+    baseurl: "http://yum.puppetlabs.com/puppet5/el/%{facts.os.release.major}/$basearch"
+    target: '/etc/yum.repos.d/puppet5.repo'
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-puppet5'
+  'puppetlabs-pc1':
+    name: 'puppetlabs-pc1'
+    enabled: true
+    descr: "Puppet Labs PC1 Repository el %{facts.os.release.major} - $basearch"
+    baseurl: "http://yum.puppetlabs.com/el/%{facts.os.release.major}/PCI/$basearch"
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-puppetlabs-PC1'
+    target: '/etc/yum.repos.d/puppetlabs-pc1.repo'
+
+lookup_config:
+

@@ -1,0 +1,13 @@
+---
+version: 5
+defaults:
+  datadir: data  # This path is relative to the module -- <moduledir>/data
+  data_hash: yaml_data  # Use the built-in YAML backend.
+
+# Default values
+hierarchy:
+- name: "OS-specific config"
+  paths: ["%{facts.os.family}/%{facts.os.release.major}.yaml", "%{facts.os.family}.yaml"]
+
+- name: "Defaults"
+  path: "defaults.yaml"

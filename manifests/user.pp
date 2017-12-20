@@ -1,38 +1,41 @@
-#Class: puppet4::user
+# Class: puppet::user
+# ===================
 #
-# Manages Puppet 4 [user] configuration for Puppet Apply
+# Manages Puppet `[user]` configuration for Puppet `apply`, `lookup`, `cert`, etc.
 #
-##Parameters
+# Parameters
+# ----------
 #
 # @param [Hash[String,String]] config Hash of configuration parameters for the [user] block of puppet.conf
-# * `config`  
+# * `config`
 # Hash of key/value Puppet configuration settings for the [user] block of puppet.conf
-#  
+#
+# Examples
+# --------
 # @example Hiera configuration
 #    classes:
-#      - puppet4
-#  
-#    puppet4::user::config:
+#      - 'puppet::user'
+#
+#    puppet::user::config:
 #      loglevel: 'info'
 #      logtarget: 'console'
 #
-##Authors
+# Authors
+# -------
+# @author Jo Rhett, Net Consonance
+# report issues at https://github.com/voxpupuli/puppet-module/issues
 #
-# @author Jo Rhett https://github.com/jorhett/puppet4-module/issues
-# Jo Rhett, Net Consonance  
-#   report issues to https://github.com/jorhett/puppet4-module/issues
-#
-##Copyright
-#
-# Copyright 2015, Net Consonance  
+# Copyright
+# ---------
+# Copyright 2017, Vox Pupuli
 # All Rights Reserved
 #
-class puppet4::user(
-  Hash[String,String] $config = {}, # common variables for all Puppet classes
+class puppet::user(
+  Hash[String,String] $config = {},
 ) {
   # Write each user configuration option to the puppet.conf file
   $config.each |$setting,$value| {
-    puppet4::inisetting { "user ${setting}":
+    puppet::inisetting { "user ${setting}":
       section => 'user',
       setting => $setting,
       value   => $value,

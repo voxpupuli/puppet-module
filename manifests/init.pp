@@ -1,91 +1,107 @@
-#Class: puppet4
+# Class: puppet
+# =============
 #
-# Installs and manages Puppet 4 configuration and package
+# Installs Puppet repo (optional), package, and manages Puppet configuration
 #
-##Parameters
+# Parameters
+# ----------
 #
-# @param [Integer] collection_version Version of Puppet Package Collection to be used for packages
-# * `collection_version`  
-# Version of Puppet Package Collection to be used for packages
-#  
-# @param [Boolean] repo_enabled Whether or not to enable the Puppet Collection repo in Yum
-# * `repo_enabled`  
-# Whether or not to enable the Puppet Collection repo in Yum. Disabled will still be installed but not used by default.
-#  
-# @param [String] package_version Version of Puppet All-in-One package to be installed
-# * `package_version`  
-# Values: 'latest', 'present', 'absent', or a specific version string
-#  
+# @param [String] package_name Name of Puppet Agent package to be installed
+# * `package_name`
+# Default Value: 'puppet-agent'
+#
+# @param [String] version Version of Puppet Agent package to be installed
+# * `version`
+# Values: 'latest' (default), 'present', 'absent', or a specific version string
+#
+# @param [Boolean] manage_repo Whether or not to create a yumrepo resource for the Puppet repo
+# * `manage_repo`
+# Default Value: true
+#
+# @param [Boolean] repo_enabled Whether or not to enable the Puppet repo in Yum
+# * `repo_enabled`
+# Whether or not to enable the Puppet repo in Yum. Disabled will still allow agent installation, but will not used by other yum commands.
+#
+# @param [Hash] repos Hash of repositories for Puppet packages
+# * `repos`
+# Hash of Yum repositories in yumrepo resource format. Deep merged with defaults in module can be overriden in environment
+#
 # @param [Hash[String,Optional[String]]] config Hash of configuration parameters for the [main] block of puppet.conf
-# * `config`  
+# * `config`
 # Hash of key/value Puppet configuration settings for the [main] block of puppet.conf
-#  
-##Variables
 #
-# This class includes the puppet4::user` class, which utilizes the following configuration variables
-#
-# * `user::config`  
-# Hash of key/value Puppet configuration settings for the [user] block of puppet.conf
-#
+# Examples
+# --------
 # @example Hiera configuration
 #    classes:
-#      - puppet4
-#  
-#    puppet4::version: 'latest'
-#    puppet4::config:
+#      - puppet
+#
+#    puppet::version: 'latest'
+#    puppet::config:
 #      loglevel: 'info'
 #      logtarget: 'syslog'
 #
-##Authors
 #
-# @author Jo Rhett https://github.com/jorhett/puppet4-module/issues
-# Jo Rhett, Net Consonance  
-#   report issues to https://github.com/jorhett/puppet4-module/issues
+# Authors
+# -------
+# @author Jo Rhett, Net Consonance
+# report issues at https://github.com/voxpupuli/puppet-module/issues
 #
-##Copyright
-#
-# Copyright 2015, Net Consonance  
+# Copyright
+# ---------
+# Copyright 2017, Vox Pupuli
 # All Rights Reserved
 #
-class puppet4(
-  Integer $collection_version           = 1,
-  Boolean $repo_enabled                 = true,
-  String $package_version               = 'latest',
-  Hash[String,Optional[String]] $config = {}, # common variables for all Puppet classes
-) inherits puppet4::params {
+class puppet(
+  # Default values in data/defaults.yaml
+  String $package_name,
+  String $version,
+  Boolean $manage_repo,
+  Boolean $repo_enabled,
+  Hash $repos,
+  Hash[String,Optional[String]] $config,
+) {
 
-  # Package collection repo
-  if( $facts['os']['family'] == 'RedHat' ) {
-    yumrepo { "puppetlabs-pc${collection_version}":
+  # Alternative is to use puppet/yum and add the appropriate repo to `yum::managed_repos`
+  if $manage_repo {
+    # Determine which repository to install
+    $repo_name = $version ? {
+      /^1/    => 'puppetlabs-pc1', # Puppet 4 == Pupet agent 1...
+      /^4/    => 'puppetlabs-pc1', # Puppet 4
+      default => 'puppet5',        # default to Puppet 5
+    }
+
+    # Create the repo compatible with yumrepo resource management
+    yumrepo { $repos[$repo_name]['name']:
       ensure   => 'present',
-      baseurl  => "http://yum.puppetlabs.com/el/7/PC${collection_version}/\$basearch",
-      descr    => "Puppet Labs PC${collection_version} Repository EL ${facts['os']['release']['major']} - \$basearch",
       enabled  => $repo_enabled,
-      gpgcheck => '1',
-      gpgkey   => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-puppetlabs',
+      baseurl  => $repos[$repo_name]['baseurl'],
+      descr    => $repos[$repo_name]['descr'],
+      gpgcheck => $repos[$repo_name]['gpgcheck'],
+      gpgkey   => $repos[$repo_name]['gpgkey'],
     }
   }
 
   # Install the Puppet agent
-  package { 'puppet-agent':
-    ensure => $package_version,
+  package { $package_name:
+    ensure => $version,
   }
 
-  # Write each agent configuration option to the puppet.conf file
+  # Write each main configuration option to the puppet.conf file
   $config.each |$setting,$value| {
-    puppet4::inisetting { "main $setting":
+    puppet::inisetting { "main ${setting}":
       section => 'main',
       setting => $setting,
       value   => $value,
     }
   }
 
-  # trigger that services can subscribe to
-  exec { 'puppet4-configuration-has-changed':
+  # A trigger that services can subscribe to
+  exec { 'puppet-configuration-has-changed':
     command     => '/bin/true',
     refreshonly => true,
   }
 
   # Call the user class to add the [user] block configs
-  include puppet4::user
+  include puppet::user
 }

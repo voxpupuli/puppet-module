@@ -1,0 +1,13 @@
+---
+puppet::package_name: 'puppet-agent'
+puppet::version: 'latest'
+puppet::manage_repo: true
+puppet::repo_enabled: true
+puppet::config:
+  loglevel: 'warning'
+
+lookup_options:
+  puppet::repos:
+    value_type: 'Hash'
+    merge:
+      strategy: 'deep'

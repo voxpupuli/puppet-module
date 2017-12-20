@@ -1,51 +1,54 @@
-#Type: puppet4::inisetting
+# Type: puppet::inisetting
+# ========================
 #
 # Installs and manages Puppet 4 configuration setting
 #
-##Parameters
+# Parameters
+# --------
 #
 # @param [Enum['main','user','agent','master']] section Section of the configuration file
-# * `section`  
+# * `section`
 # Section of the configuration file. One of 'main','user','agent','master'
 #
 # @param [String] setting Name of the configuration setting
-# * `setting`  
+# * `setting`
 # Name of the configuration setting
-#  
+#
 # @param [String] value Value for the setting
-# * `value`  
+# * `value`
 # Values for the setting
-#  
+#
+# Examples
+# --------
 # @example Hiera configuration
 #    classes:
-#      - puppet4
-#  
-#    puppet4::version: 'latest'
-#    puppet4::config:
+#      - puppet
+#
+#    puppet::version: 'latest'
+#    puppet::config:
 #      loglevel: 'info'
 #      logtarget: 'syslog'
 #
-##Authors
+# Authors
+# -------
+# @author Jo Rhett, Net Consonance 
+#   report issues to https://github.com/jorhett/puppet-module/issues
 #
-# @author Jo Rhett https://github.com/jorhett/puppet4-module/issues
-# Jo Rhett, Net Consonance  
-#   report issues to https://github.com/jorhett/puppet4-module/issues
-#
-##Copyright
-#
-# Copyright 2015, Net Consonance  
+# Copyright
+# ---------
+# Copyright 2017, Vox Pupuli
 # All Rights Reserved
 #
-define puppet4::inisetting(
-  Enum['main','user','agent','master'] $section = 'main',
+define puppet::inisetting(
   String $setting,
-  Optional[String] $value = undef,
+  Enum['main','user','agent','master'] $section = 'main',
+  Optional[String] $value                       = undef,
 ) {
 
   # Remove values not defined or empty
   $is_present = $value ? {
     undef   => 'absent',
-    ""      => 'absent',
+    ''      => 'absent',
     default => 'present',
   }
 
@@ -56,7 +59,7 @@ define puppet4::inisetting(
     section => $section,
     setting => $setting,
     value   => $value,
-    require => Package['puppet-agent'],
-    notify  => Exec['puppet4-configuration-has-changed'],
+    require => Package[$puppet::package_name],
+    notify  => Exec['puppet-configuration-has-changed'],
   }
 }
