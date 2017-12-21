@@ -14,9 +14,9 @@
 # * `setting`
 # Name of the configuration setting
 #
-# @param [String] value Value for the setting
+# @param [Variant[String,Integer,Boolean,Undef]] value Value for the setting
 # * `value`
-# Values for the setting
+# Default value: undef
 #
 # Examples
 # --------
@@ -42,7 +42,7 @@
 define puppet::inisetting(
   String $setting,
   Enum['main','user','agent','master'] $section = 'main',
-  Optional[String] $value                       = undef,
+  Variant[String,Boolean,Integer,Undef] $value  = undef,
 ) {
 
   # Remove values not defined or empty
@@ -54,12 +54,13 @@ define puppet::inisetting(
 
   # Write the agent configuration option to the puppet.conf file
   ini_setting { $title:
-    ensure  => $is_present,
-    path    => '/etc/puppetlabs/puppet/puppet.conf',
-    section => $section,
-    setting => $setting,
-    value   => $value,
-    require => Package[$puppet::package_name],
-    notify  => Exec['puppet-configuration-has-changed'],
+    ensure       => $is_present,
+    path         => '/etc/puppetlabs/puppet/puppet.conf',
+    section      => $section,
+    setting      => $setting,
+    value        => $value,
+    indent_width => 2,
+    require      => Package[$puppet::package_name],
+    notify       => Exec['puppet-configuration-has-changed'],
   }
 }
