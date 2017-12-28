@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/voxpupuli/puppet-module.svg?branch=master)](https://travis-ci.org/voxpupuli/puppet-module)
 
-Manage Puppet 4 local apply, agent, and certificate configuration.
+Manage Puppet 4/5+ apply, agent, certificate, and other Puppet tools configuration.
 
 #### Table of Contents
 
@@ -19,28 +19,32 @@ Manage Puppet 4 local apply, agent, and certificate configuration.
 
 ## Overview
 
-This module utilizes Hiera hierarchies to customize Puppet 4 configuration for all three commands:
+This module utilizes Hiera hierarchies to customize Puppet configuration for all three commands:
   * ```puppet apply```
   * ```puppet agent```
   * ```puppet cert```
+  * ```puppet lookup```
   * ...etc
 
 ## Module Description
 
-Installs and configures Puppet 4 package and optionally the agent daemon.
-It strives to demonstrate Puppet 4 best practices.
+Configures Puppet 4/5+ agent, user tools, etc.
+
+* Manages the Puppet yum repositories (if desired)
+* Upgrades the `puppet-agent` package (if desired)
+* Performs single-option configuration changes allowing local customizations to remain
+* Strives to demonstrate Puppet best practices.
 
 ## Setup
 
 ### What puppet affects
 
+* Yumrepo
+  * Puppet package repository
 * Packages
-  * Puppet Package Collection repository
-  * Puppet 4 Package
-  * Puppet Server Package (optional)
+  * Puppet package
 * Configuration Files
   * /etc/puppetlabs/puppet/puppet.conf
-  * /etc/puppetlabs/server/webapp.conf
 
 ### Setup Requirements
 
@@ -59,16 +63,17 @@ Hiera configuration:
 Configuration values in Hiera (or supplied by an node terminus):
 
 * Common
-  * `puppet::pc_version` = Integer version of the Package Collection to use
+  * `puppet::package_name` = Override the default `puppet-agent` package name (for custom packages)
+  * `puppet::manage_repo` = Boolean to manage the yum repo for the specified Puppet version
+  * `puppet::repo_enabled` = Boolean to enable the repo for all Yum commands
+  * `puppet::repos` = hash to override the public repo with a local mirror
   * `puppet::version` = 'latest', 'present', 'absent', or a specific version.
-  * `puppepuppetig` = Hash of configuration parameters for the [main] section of puppet.conf
-  * `puppet::user::config` = Hash of configuration parameters for the [user] section of puppet.conf
+  * `puppet::config` = Hash of configuration parameters for the `[main]` section of puppet.conf
+  * `puppet::user::config` = Hash of configuration parameters for the `[user]` section of puppet.conf
 * Agent
   * `puppet::agent::status` = 'Running' (default) or 'Stopped'
   * `puppet::agent::enabled` = true (default) or false
   * `puppet::agent::config` = Hash of configuration parameters for the [agent] section of puppet.conf
-* Master
-  * `puppet::master::config` = Hash of configuration parameters for the [master] section of puppet.conf
 
 ## Reference
 
@@ -78,5 +83,4 @@ Configuration values in Hiera (or supplied by an node terminus):
   * `puppet` - Maintains package repository, puppet package, and [main] block of puppet.conf
   * `puppet::user` - Maintains [user] block of puppet.conf
   * `puppet::agent` - Maintains [agent] block of puppet.conf and the `puppet` service
-  * `puppet::server` - Maintains [master] block of puppet.conf and the `puppetserver` service
 
