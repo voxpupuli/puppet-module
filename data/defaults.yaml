@@ -11,3 +11,12 @@ lookup_options:
     value_type: 'Hash'
     merge:
       strategy: 'deep'
+  puppet::config:
+    merge:
+      strategy: 'deep'
+  puppet::agent::config:
+    merge:
+      strategy: 'deep'
+  puppet::user::config:
+    merge:
+      strategy: 'deep'
