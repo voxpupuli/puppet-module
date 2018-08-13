@@ -1,17 +1,35 @@
 require 'puppetlabs_spec_helper/module_spec_helper'
+require 'rspec-puppet-facts'
+include RspecPuppetFacts
 
-RSpec.configure do |config|
-  # supply tests with a possibility to test for the future parser
-  config.ordering = 'manifest' # Puppet 5 standard
-  config.stringify_facts = false # Puppet 5 standard
+# This file is managed via modulesync
+# https://github.com/voxpupuli/modulesync
+# https://github.com/voxpupuli/modulesync_config
 
-  # provide a coverage report
-  config.after(:suite) do
-    RSpec::Puppet::Coverage.report!
+if Dir.exist?(File.expand_path('../../lib', __FILE__))
+  require 'coveralls'
+  require 'simplecov'
+  require 'simplecov-console'
+  SimpleCov.formatters = [
+    SimpleCov::Formatter::HTMLFormatter,
+    SimpleCov::Formatter::Console
+  ]
+  SimpleCov.start do
+    track_files 'lib/**/*.rb'
+    add_filter '/spec'
+    add_filter '/vendor'
+    add_filter '/.vendor'
   end
 end
 
-if ENV['DEBUG']
-  Puppet::Util::Log.level = :debug
-  Puppet::Util::Log.newdestination(:console)
+RSpec.configure do |c|
+  default_facts = {
+    puppetversion: Puppet.version,
+    facterversion: Facter.version
+  }
+  default_facts.merge!(YAML.load(File.read(File.expand_path('../default_facts.yml', __FILE__)))) if File.exist?(File.expand_path('../default_facts.yml', __FILE__))
+  default_facts.merge!(YAML.load(File.read(File.expand_path('../default_module_facts.yml', __FILE__)))) if File.exist?(File.expand_path('../default_module_facts.yml', __FILE__))
+  c.default_facts = default_facts
 end
+
+# vim: syntax=ruby
