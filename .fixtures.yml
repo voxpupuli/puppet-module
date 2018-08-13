@@ -1,8 +1,6 @@
 fixtures:
-  forge_modules:
-    stdlib:
-      repo: "puppetlabs/stdlib"
-      ref: 4.12.0
-    inifile:
-      repo: "puppetlabs/inifile"
-      ref: 2.1.1
+  repositories:
+    stdlib: 'https://github.com/puppetlabs/puppetlabs-stdlib.git'
+    inifile: 'https://github.com/puppetlabs/puppetlabs-inifile.git'
+  symlinks:
+    puppet: "#{source_dir}"
