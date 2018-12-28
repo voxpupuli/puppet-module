@@ -49,27 +49,10 @@
       ]
     },
     {
-      "operatingsystem": "Debian",
-      "operatingsystemrelease": [
-        "6",
-        "7"
-      ]
-    },
-    {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "17.10",
-        "17.04",
-        "16.10",
-        "16.04",
-        "15.10",
-        "15.04",
-        "14.10",
         "14.04",
-        "13.10",
-        "13.04",
-        "12.10",
-        "12.04"
+        "16.04"
       ]
     }
   ],
