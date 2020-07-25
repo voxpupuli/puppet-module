@@ -40,14 +40,13 @@
 # Copyright 2017, Vox Pupuli
 # All Rights Reserved
 #
-class puppet::agent(
+class puppet::agent (
   # input parameters and default values for the class
   String $service_name               = 'puppet',
   Enum['running','stopped'] $status  = 'running',
   Boolean $enabled                   = true,
   Hash $config                       = {},
 ) inherits puppet {
-
   # Write each agent configuration option to the puppet.conf file
   $config.each |$setting,$value| {
     puppet::inisetting { "agent ${setting}":

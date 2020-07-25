@@ -52,7 +52,7 @@
 # Copyright 2017, Vox Pupuli
 # All Rights Reserved
 #
-class puppet(
+class puppet (
   # Default values in data/defaults.yaml
   String $package_name,
   String $version,
@@ -61,7 +61,6 @@ class puppet(
   Hash $repos,
   Hash[String,Optional[String]] $config,
 ) {
-
   # Alternative is to use puppet/yum and add the appropriate repo to `yum::managed_repos`
   if $manage_repo {
     # Determine which repository to install
