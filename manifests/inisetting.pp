@@ -39,12 +39,11 @@
 # Copyright 2017, Vox Pupuli
 # All Rights Reserved
 #
-define puppet::inisetting(
+define puppet::inisetting (
   String $setting,
   Enum['main','user','agent','master'] $section = 'main',
   Variant[String,Boolean,Integer,Undef] $value  = undef,
 ) {
-
   # Remove values not defined or empty
   $is_present = $value ? {
     undef   => 'absent',

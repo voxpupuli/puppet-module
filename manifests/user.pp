@@ -30,7 +30,7 @@
 # Copyright 2017, Vox Pupuli
 # All Rights Reserved
 #
-class puppet::user(
+class puppet::user (
   Hash[String,String] $config = {},
 ) {
   # Write each user configuration option to the puppet.conf file
