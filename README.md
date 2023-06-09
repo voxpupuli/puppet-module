@@ -1,3 +1,5 @@
+**This module is deprecated. Do not use it anymore**
+
 # Puppet Configuration
 
 [![Build Status](https://travis-ci.org/voxpupuli/puppet-module.svg?branch=master)](https://travis-ci.org/voxpupuli/puppet-module)
